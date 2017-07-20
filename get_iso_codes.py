@@ -1,3 +1,5 @@
+""" Small script from xrotwang to get Glottolog code to ISO 639-3 code mappings """
+
 import csv
 from pyglottolog.api import Glottolog
 
