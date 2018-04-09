@@ -4,6 +4,11 @@
         `pip install --upgrade --force-reinstall pyglottolog`
         `pip install fuzzywuzzy`
 
+    Usage:
+        $ python match.py nyun1247 Bibbulman
+        (u'bibb1234', u'Bibbulman', 100)
+        $ python match.py nyun1247 Balardung
+        None
 """
 
 from fuzzywuzzy import fuzz
@@ -20,11 +25,6 @@ def matching_dialect(glottolog, glottocode, name):
 if __name__ == "__main__":
     import sys
     from pyglottolog.api import Glottolog
-
     print matching_dialect(Glottolog(), *sys.argv[1:])
 
-# Usage:
-# $ python match.py nyun1247 Bibbulman
-# (u'bibb1234', u'Bibbulman', 100)
-# $ python match.py nyun1247 Balardung
-# None
+
