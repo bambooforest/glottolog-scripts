@@ -1,0 +1,12 @@
+---
+title: "Get Glottolog data for language family, macroarea, "
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+  
+```{r, echo=FALSE, include=FALSE}
+library(dplyr)
+```
