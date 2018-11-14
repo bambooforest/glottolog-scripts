@@ -1,4 +1,8 @@
-"""Use treedb iterdescendants to get a long format table of language descendants"""
+"""Use treedb.iterdescendants() to get a long format table of language descendants.
+
+iterdescendants takes optional iterdescendants(parent_level=None, child_level=None
+
+"""
 
 import treedb
 import csv
