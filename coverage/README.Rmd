@@ -1,0 +1,123 @@
+---
+title: "Get language counts from Glottolog for language family and macroarea"
+author: "Steven Moran\n"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: github_document
+---
+  
+This script loads the [Glottolog](https://glottolog.org) data and extracts various counts.
+  
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+Get the Glottolog languoids data.
+
+```{r}
+# https://cdstar.shh.mpg.de/bitstreams/EAEA0-D501-DBB8-65C4-0/glottolog_languoid.csv.zip
+languoids <- read.csv("glottolog_languoid/languoid.csv", stringsAsFactors = FALSE)
+```
+
+How does it look?
+
+```{r}
+glimpse(languoids)
+```
+
+How many levels are in `level`?
+
+```{r}
+table(languoids$level)
+```
+
+Unique language family ids. This includes all dialects, empty family_id strings, etc.
+
+```{r}
+sort(table(languoids$family_id, exclude = FALSE), decreasing = TRUE)
+```
+
+Get just the language level families and their glottocodes.
+
+```{r}
+families_glottocodes <- languoids %>% filter(level == "language") %>% filter(family_id != "")
+glimpse(families_glottocodes)
+```
+
+Get language families and their glottocode counts.
+
+```{r}
+families_counts <- families_glottocodes %>% group_by(family_id) %>% summarize(count = n()) %>% arrange(desc(count))
+```
+
+There are these many language families in Glottolog -- that are not language isolates.
+
+```{r}
+head(families_counts)
+dim(families_counts)
+```
+
+Get the language isolates.
+
+```{r}
+isolates <- languoids %>% filter(family_id == "") %>% filter(parent_id == "") %>% filter(level == "language")
+```
+
+There are these many isolates in Glottolog.
+
+```{r}
+glimpse(isolates)
+```
+
+Let's combine the isolates into the language family counts.
+
+```{r}
+isolates_counts <- isolates %>% select(id) %>% rename(family_id = id)
+isolates_counts$count <- 1
+families_counts <- rbind(families_counts, isolates_counts)
+```
+
+There are this many language families, with isolates, reported in Glottolog.
+
+```{r}
+glimpse(families_counts)
+length(unique(families_counts$family_id))
+```
+
+
+Access the languages and dialects geo data from Glottolog.
+
+```{r, warning=FALSE, message=FALSE}
+# languages_and_dialects_geo <- read_csv(url("https://cdstar.shh.mpg.de/bitstreams/EAEA0-D501-DBB8-65C4-0/languages_and_dialects_geo.csv"))
+languages_and_dialects_geo <- read_csv("glottolog_languoid/languages_and_dialects_geo.csv")
+```
+
+```{r}
+glimpse(languages_and_dialects_geo)
+```
+
+Get Glottolog macroareas and their language counts.
+
+```{r}
+languages_geo <- languages_and_dialects_geo %>% filter(level == "language") %>% filter(macroarea != "") %>% group_by(glottocode)
+```
+
+```{r}
+head(languages_geo)
+```
+```{r}
+table(languages_geo$macroarea)
+```
+
+```{r}
+macroarea_counts <- languages_geo %>% group_by(macroarea) %>% summarise(counts = n())
+```
+
+```{r}
+macroarea_counts
+```
+
+Save the counts.
+
+```{r}
+save(families_counts, macroarea_counts, file = "glottolog-counts.RData")
+```
