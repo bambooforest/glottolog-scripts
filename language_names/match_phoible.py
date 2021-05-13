@@ -2,7 +2,7 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 from pyglottolog.api import Glottolog
 
-api = Glottolog('/Users/stiv/Github/glottolog')
+api = Glottolog("/Users/stiv/Github/glottolog")
 
 
 def matching_dialect(glottocode, name):
@@ -36,6 +36,9 @@ def get_code(glottocode, name):
 
 
 if __name__ == "__main__":
+    # WWSD data
+    # df = pd.read_csv("wwsd.txt", delimiter='\t', na_filter=False)
+
     # Usage on Claire's data
     df = pd.read_csv("claire-language-names.csv", delimiter='\t', na_filter=False)
 
@@ -44,7 +47,7 @@ if __name__ == "__main__":
     
     # Usage on phoible:
     # Production data
-    # url = "https://raw.githubusercontent.com/phoible/dev/master/mappings/InventoryID-LanguageCodes.tsv"
+    # url = "InventoryID-LanguageCodes.tsv"
     # df = pd.read_csv(url, delimiter='\t', na_filter=False)
 
     # Test data

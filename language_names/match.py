@@ -25,4 +25,4 @@ def matching_dialect(glottolog, glottocode, name):
 if __name__ == "__main__":
     import sys
     from pyglottolog.api import Glottolog
-    print matching_dialect(Glottolog(), *sys.argv[1:])
+    print(matching_dialect(Glottolog("/Users/stiv/Github/glottolog"), *sys.argv[1:]))
